@@ -1,7 +1,7 @@
 # BackUpTheHub
 
 A simple Python tool that downloads and saves all GitHub repositories of a user to a configured location.
-It is designed as a easy-to-use backup solution for GitHub repositories. It is not interact as a way to manage 
+It is designed as a easy-to-use backup solution for GitHub repositories. It is not intended as a way to manage 
 or interact with repositories, but rather as a one-time backup utility.
 Basically I wanted a easy way to clone my stuff to a external drive with the least amount of effort possible.
 
