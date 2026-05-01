@@ -36,3 +36,9 @@ wheels/
 # OS
 .DS_Store
 Thumbs.db
+/.idea/.gitignore
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/PythonProject.iml
+/.idea/vcs.xml
