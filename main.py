@@ -67,13 +67,46 @@ def get_all_repositories(token: str, username: str = None):
         sys.exit(1)
 
 
+def pull_repo(repo, dest: Path) -> bool:
+    """Pull latest changes for an existing repository."""
+    try:
+        result = subprocess.run(
+            ["git", "pull"],
+            cwd=str(dest),
+            capture_output=True,
+            text=True,
+            timeout=300
+        )
+
+        if result.returncode == 0:
+            output = result.stdout.strip()
+            if "Already up to date" in output:
+                print(f"  [UP-TO-DATE] '{repo.full_name}'")
+            else:
+                print(f"  [UPDATED]    '{repo.full_name}'")
+                if output:
+                    print(f"               {output[:200]}")
+            return True
+        else:
+            print(f"  [FAIL] Could not pull '{repo.full_name}'")
+            if result.stderr:
+                print(f"         Error: {result.stderr.strip()[:200]}")
+            return False
+
+    except subprocess.TimeoutExpired:
+        print(f"  [FAIL] Timeout pulling '{repo.full_name}' (>5 minutes)")
+        return False
+    except Exception as e:
+        print(f"  [FAIL] Error pulling '{repo.full_name}': {e}")
+        return False
+
+
 def clone_repo(repo, backup_path: Path, use_ssh: bool = False) -> bool:
     """Clone a single repository using git."""
     dest = backup_path / repo.name
 
     if dest.exists():
-        print(f"  [SKIP] '{repo.name}' already exists")
-        return True
+        return pull_repo(repo, dest)
 
     # Choose clone URL based on configuration
     clone_url = repo.ssh_url if use_ssh else repo.clone_url
@@ -134,30 +167,31 @@ def main():
     # Clone each repository
     print(f"Starting backup to '{backup_path}'\n")
 
-    success_count = 0
+    cloned_count = 0
+    updated_count = 0
     failed_count = 0
-    skipped_count = 0
 
     for index, repo in enumerate(repositories, start=1):
         print(f"[{index}/{total}] {repo.full_name}")
 
         dest = backup_path / repo.name
-        if dest.exists():
-            skipped_count += 1
-            result = clone_repo(repo, backup_path, use_ssh)
-        else:
-            result = clone_repo(repo, backup_path, use_ssh)
-            if result:
-                success_count += 1
+        existed = dest.exists()
+        result = clone_repo(repo, backup_path, use_ssh)
+
+        if result:
+            if existed:
+                updated_count += 1
             else:
-                failed_count += 1
+                cloned_count += 1
+        else:
+            failed_count += 1
 
     # Summary
     print()
     print("=" * 50)
     print("           Backup Complete!")
     print("=" * 50)
-    print(f"Total: {total} | Success: {success_count} | Skipped: {skipped_count} | Failed: {failed_count}")
+    print(f"Total: {total} | Cloned: {cloned_count} | Pulled/Up-to-date: {updated_count} | Failed: {failed_count}")
     print()
 
 

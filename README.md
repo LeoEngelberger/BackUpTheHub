@@ -1,15 +1,21 @@
-# BAckUpper
+# BackUpTheHub
 
 A simple Python tool that downloads and saves all GitHub repositories of a user to a configured location.
+It is desined as a easy-to-use backup solution for GitHub repositories. It is not designed as a way to manage 
+or interact with repositories, but rather as a one-time backup utility.
+Basically I wanted a easy way to clone my stuff to a external drive with the least amount of effort possible.
+
+And yes agents were involved, this is a low effort project afterall...
+
+**_This Tool is intended for personal use only, as it as neither been tested thorughly nor has its security been audited. 
+Use at your own risk._**
 
 ## Features
 
-- 🔧 Configuration file-based (no interactive prompts)
-- 🌐 Cross-platform (Windows, macOS, Linux)
-- 📦 Simple git cloning process
-- 🔒 Supports both HTTPS and SSH authentication
-- ⏭️ Skips repositories that already exist
-- 📊 Summary statistics after backup completion
+- Configuration file-based (no interactive prompts)
+- Simple git cloning process
+- Supports both HTTPS and SSH authentication
+- Skips repositories that already exist
 
 ## Installation
 
