@@ -1,0 +1,22 @@
+# BAckUpper Configuration File
+# Copy this file to config.yaml and fill in your details
+
+# GitHub Personal Access Token
+# Create one at: https://github.com/settings/tokens
+# Required scopes: repo (for private repos) or public_repo (for public repos only)
+github_token: "your_github_token_here"
+
+# GitHub username to backup repositories from
+github_username: "your_username_here"
+
+# Local path where repositories will be cloned
+backup_path: "/path/to/backup/directory"
+
+# Optional: SSH key path (if not using default)
+# Leave empty to use HTTPS cloning (no SSH key needed)
+ssh_key_path: ""
+
+# Optional: Clone using SSH instead of HTTPS
+# Set to true if you want to use SSH (requires ssh_key_path and SSH agent configured)
+# Set to false to use HTTPS (simpler, works everywhere)
+use_ssh: false
